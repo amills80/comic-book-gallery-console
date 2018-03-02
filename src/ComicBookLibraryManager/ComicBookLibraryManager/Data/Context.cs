@@ -16,10 +16,19 @@ namespace ComicBookLibraryManager.Data
 
         public Context()
         {
-            // This call to the SetInitializer method is used 
-            // to configure EF to use our custom database initializer class
-            // which contains our app's database seed data.
-            Database.SetInitializer(new DatabaseInitializer());
+            //// This call to the SetInitializer method is used 
+            //// to configure EF to use our custom database initializer class
+            //// which contains our app's database seed data.
+            //Database.SetInitializer(new DatabaseInitializer());
+
+#if DEBUG
+            // Disable the database initializer in favor of using Code First Migrations.
+            Database.SetInitializer<Context>(null);
+#else
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, Configuration>());
+#endif
+
+
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
